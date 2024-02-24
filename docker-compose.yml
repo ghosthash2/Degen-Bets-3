@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  bets-backend:
+    networks:
+      - bridge
+    # build:  
+    #   context: ./bets-backend
+    #   dockerfile: Dockerfile
+    image: ghcr.io/creedscode/hsb-mvp-bb:0.0.1
+    # ports:
+    #   - 3000:3000
+    environment:
+      - ODDS_API_KEY=${BACKEND_ODDS_API_KEY}
+      - MYSQL_DATABASE=${BACKEND_MYSQL_DATABASE}
+      - MYSQL_HOST=${BACKEND_MYSQL_HOST}
+      - MYSQL_PORT=${BACKEND_MYSQL_PORT}
+      - MYSQL_USERNAME=${BACKEND_MYSQL_USERNAME}
+      - MYSQL_PASSWORD=${BACKEND_MYSQL_PASSWORD}
+      - MYSQL_SYNCHRONIZE=${BACKEND_MYSQL_SYNCHRONIZE}
+      - SIGNATURE_MESSAGE=${BACKEND_SIGNATURE_MESSAGE}
+      - TIMEZONE=${BACKEND_TIMEZONE}
+      - MONGODB_COLLECTION=${MONGODB_COLLECTION}
+      - MONGODB_DB=${MONGODB_DB}
+      - MONGODB_URI=${MONGODB_URI}
+
+  telegram-bot:
+    networks:
+      - bridge
+    image: ghcr.io/creedscode/hsb-mvp-tgb:0.0.1
+    # build:
+    #   context: ./telegram-bot
+    #   dockerfile: Dockerfile
+    environment:
+      - BOT_TOKEN=${BOT_BOT_TOKEN}
+      - BACKEND_PORT=3000
+      - BACKEND_HOSTNAME=bets-backend
+      - MONGODB_COLLECTION=${MONGODB_COLLECTION}
+      - MONGODB_DB=${MONGODB_DB}
+      - MONGODB_URI=${MONGODB_URI}
+
+
+networks:
+  bridge:
+    driver: bridge
